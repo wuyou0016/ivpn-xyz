@@ -5,7 +5,7 @@ summary: VPN本身的加密技术是成熟可靠的，真正的安全风险更�
 pubDate: 2026-09-05
 category: VPN基础知识
 tags: [VPN, 安全, 隐私]
-related: ["vpn/what-is-vpn", "vpn/vpn-vs-proxy", "airport/stable-airport-criteria"]
+related: ["vpn/what-is-vpn", "vpn/vpn-vs-proxy", "airport/what-is-dns-leak"]
 faq:
   - q: 免费VPN安全吗？
     a: 需要谨慎对待。运营一套VPN基础设施是有成本的，一些完全免费的VPN可能通过收集和出售用户数据、插入广告、限制带宽等方式获利，选择前建议了解清楚该服务的商业模式和隐私政策。

@@ -5,7 +5,7 @@ summary: 传统VPN多使用OpenVPN/IPsec/WireGuard等协议、按整机连接计
 pubDate: 2026-09-05
 category: VPN基础知识
 tags: [VPN, 机场, 概念对比]
-related: ["airport/what-is-airport", "vpn/what-is-vpn", "airport/how-to-choose-airport"]
+related: ["airport/what-is-airport", "vpn/vpn-protocols-comparison", "airport/proxy-protocols-comparison", "airport/how-to-choose-airport"]
 faq:
   - q: 机场是不是就是VPN的一种？
     a: 可以说机场是"代理订阅服务"，技术上更接近代理而非传统VPN协议，但在国内语境里两者经常被混用，实际使用体验（换IP、加密流量、访问受限内容）有相似之处。
@@ -17,8 +17,8 @@ faq:
 
 ## 技术协议不同
 
-- **VPN**：通常基于 OpenVPN、IPsec/IKEv2、WireGuard 等标准VPN协议，这些协议被设计用于通用的加密隧道场景（包括企业内网），历史更久，标准化程度高。
-- **机场**：底层通常使用 Shadowsocks、VMess、VLESS、Trojan、Hysteria2 等专门针对"翻墙"场景优化的代理协议，这些协议更强调抗封锁、抗流量特征识别的能力。
+- **VPN**：通常基于 OpenVPN、IPsec/IKEv2、WireGuard 等标准VPN协议（具体对比见[VPN协议对比](/vpn/vpn-protocols-comparison/)），这些协议被设计用于通用的加密隧道场景（包括企业内网），历史更久，标准化程度高。
+- **机场**：底层通常使用 Shadowsocks、VMess、VLESS、Trojan、Hysteria2 等专门针对"翻墙"场景优化的代理协议（具体对比见[机场协议对比](/airport/proxy-protocols-comparison/)），这些协议更强调抗封锁、抗流量特征识别的能力。
 
 ## 服务形态不同
 

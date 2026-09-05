@@ -5,7 +5,7 @@ summary: macOS上常用的代理客户端是ClashX Meta或Surge，导入订阅�
 pubDate: 2026-09-05
 category: 客户端教程
 tags: [macOS, 客户端教程]
-related: ["guide/clash-basics", "guide/windows-proxy-setup", "airport/what-is-airport"]
+related: ["guide/clash-basics", "guide/tun-mode-explained", "airport/what-is-airport"]
 ---
 
 ## 准备工作
@@ -30,7 +30,7 @@ related: ["guide/clash-basics", "guide/windows-proxy-setup", "airport/what-is-ai
 
 ## 第四步：开启系统代理
 
-在菜单里勾选"设置为系统代理"，Mac的网络设置会自动被客户端接管代理配置。如果需要更彻底的全局接管，也可以查看客户端是否提供增强模式/TUN模式（不同版本功能名称可能不同）。
+在菜单里勾选"设置为系统代理"，Mac的网络设置会自动被客户端接管代理配置。如果需要更彻底的全局接管，也可以查看客户端是否提供增强模式/[TUN模式](/guide/tun-mode-explained/)（不同版本功能名称可能不同）。
 
 ## 第五步：验证效果
 

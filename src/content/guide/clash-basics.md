@@ -5,7 +5,7 @@ summary: Clash的核心概念是"订阅提供节点、策略组决定怎么选�
 pubDate: 2026-09-05
 category: 客户端教程
 tags: [Clash, 客户端教程, 分流规则]
-related: ["guide/windows-proxy-setup", "guide/macos-proxy-setup", "airport/what-is-airport-node"]
+related: ["guide/clash-rules-guide", "guide/tun-mode-explained", "airport/what-is-airport-node"]
 faq:
   - q: Clash、Clash Verge、ClashX Meta是什么关系？
     a: Clash最初是一个开源代理内核项目，后来衍生出多个基于这个内核（或其继任者Mihomo/Clash Meta）开发的图形界面客户端，比如Windows上的Clash Verge、macOS上的ClashX Meta、Android上的Clash Meta for Android，核心逻辑相通，界面和平台不同。
@@ -32,7 +32,7 @@ Clash最初是一个开源的代理内核项目，负责实现流量转发、多
 
 ## 核心概念三：分流规则（Rules）
 
-分流规则决定"某个域名或IP的流量应该走代理还是直连"。例如，你可能希望访问境外网站走代理，访问国内网站直接连接，不额外经过代理服务器（既能加快国内网站访问速度，也能节省流量额度）。规则通常基于域名列表、IP段等方式匹配，机场的默认订阅通常已经内置一套常用规则，进阶用户也可以自己编写或使用社区维护的规则集。
+分流规则决定"某个域名或IP的流量应该走代理还是直连"。例如，你可能希望访问境外网站走代理，访问国内网站直接连接，不额外经过代理服务器（既能加快国内网站访问速度，也能节省流量额度）。规则通常基于域名列表、IP段等方式匹配，机场的默认订阅通常已经内置一套常用规则，进阶用户也可以自己编写或使用社区维护的规则集，具体的规则类型和规则集用法见[Clash分流规则进阶](/guide/clash-rules-guide/)。
 
 ## 一个典型的连接流程
 

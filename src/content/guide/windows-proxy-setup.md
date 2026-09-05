@@ -5,7 +5,7 @@ summary: 在Windows上使用代理，通常是下载Clash Verge等客户端，�
 pubDate: 2026-09-05
 category: 客户端教程
 tags: [Windows, 客户端教程]
-related: ["guide/clash-basics", "guide/singbox-basics", "airport/what-is-airport"]
+related: ["guide/clash-basics", "guide/tun-mode-explained", "airport/what-is-airport"]
 faq:
   - q: 一定要用Clash吗，能不能直接改Windows的代理设置？
     a: 直接在Windows"网络和Internet设置"里填代理地址，只适用于已经有本地代理端口（比如客户端软件已经在监听某个端口）的情况，本身不能解析机场的订阅链接、也无法处理分流规则，实际使用中还是需要先安装Clash等客户端。
@@ -36,7 +36,7 @@ faq:
 ## 第四步：开启系统代理或TUN模式
 
 - **系统代理模式**：在设置里开启"系统代理"，客户端会自动修改Windows的代理设置，大部分应用的流量会经过代理。
-- **TUN模式**：会创建一个虚拟网卡，接管几乎全部系统流量，效果更接近传统VPN的"全局代理"，但对系统权限要求更高，需要以管理员身份运行。
+- **TUN模式**：会创建一个虚拟网卡，接管几乎全部系统流量，效果更接近传统VPN的"全局代理"，但对系统权限要求更高，需要以管理员身份运行，具体原理和适用场景见[什么是TUN模式](/guide/tun-mode-explained/)。
 
 新手建议先使用系统代理模式，熟悉之后再根据需要尝试TUN模式。
 

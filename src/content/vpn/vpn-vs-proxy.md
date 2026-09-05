@@ -5,7 +5,7 @@ summary: VPN在操作系统层面加密全部流量，代理通常只在应用�
 pubDate: 2026-09-05
 category: VPN基础知识
 tags: [VPN, 代理, 概念对比]
-related: ["vpn/what-is-proxy-server", "vpn/what-is-vpn", "vpn/what-is-node"]
+related: ["vpn/what-is-proxy-server", "vpn/vpn-protocols-comparison", "airport/proxy-protocols-comparison", "airport/what-is-dns-leak"]
 faq:
   - q: 代理会加密我的流量吗？
     a: 取决于代理类型。HTTP代理通常不加密；HTTPS代理只加密到代理服务器这一段；而Shadowsocks、VMess、VLESS等现代代理协议本身设计了加密层，安全性接近VPN。
@@ -30,7 +30,11 @@ VPN 和代理都能起到"更换出口 IP、转发流量"的作用，但两者�
 
 ## 常见的代理协议
 
-国内用户接触到的"机场"服务，底层通常使用的是专门为代理场景设计的协议，例如 Shadowsocks、VMess、VLESS、Trojan、Hysteria2 等，而不是传统企业VPN常用的 OpenVPN、IPsec、WireGuard。这些代理协议在抗探测、连接效率上做了针对性优化，具体可参考[机场节点是什么意思](/airport/what-is-airport-node/)。
+国内用户接触到的"机场"服务，底层通常使用的是专门为代理场景设计的协议，例如 Shadowsocks、VMess、VLESS、Trojan、Hysteria2 等（具体对比见[机场协议对比](/airport/proxy-protocols-comparison/)），而不是传统企业VPN常用的 OpenVPN、IPsec、WireGuard（对比见[VPN协议对比](/vpn/vpn-protocols-comparison/)）。这些代理协议在抗探测、连接效率上做了针对性优化，具体可参考[机场节点是什么意思](/airport/what-is-airport-node/)。
+
+## 别忽略DNS请求的处理
+
+不管用VPN还是代理，一个容易被忽略的细节是域名解析（DNS）请求是否也经过了加密隧道转发。如果客户端配置不当，即使网页流量已经走了代理，DNS请求仍可能直接暴露给本地网络运营商，也就是[DNS泄露](/airport/what-is-dns-leak/)，会削弱代理原本的隐私保护效果。
 
 ## 该怎么选
 

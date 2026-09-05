@@ -9,6 +9,7 @@ const title = '无忧链接怎么样？介绍、优缺点与使用教程｜ivpn'
 const description =
   '无忧链接（wuyoulink.com.cn）是本站重点介绍的机场服务：套餐信息、适合人群、客户端教程、优缺点与常见问题，官网资料与本站观察分开标注。';
 const verifiedDate = '2026-09-05';
+const pageUpdatedDate = '2026-09-06';
 
 const plans = [
   { name: 'MINI 链接', price: '¥6/月', traffic: '40GB/月', tag: '' },
@@ -22,7 +23,7 @@ const articleSchema = {
   headline: '无忧链接怎么样？介绍、优缺点与使用教程',
   description,
   datePublished: '2026-09-05',
-  dateModified: verifiedDate,
+  dateModified: pageUpdatedDate,
   inLanguage: 'zh-CN',
   mainEntityOfPage: 'https://ivpn.xyz/airport/wuyou/',
   publisher: { '@type': 'Organization', name: 'ivpn', url: 'https://ivpn.xyz/' },
@@ -60,6 +61,16 @@ const faqItems = [
   </section>
 
   <article class="prose wuyou-page">
+    <div class="quick-cta">
+      <div class="quick-cta-text">
+        <strong>快速了解：</strong>¥6/月起，40GB～200GB三档套餐，官网信息见下方"套餐信息"，本站暂无独立实测数据。
+      </div>
+      <div class="quick-cta-actions">
+        <a class="button" href="https://wuyoulink.com.cn" rel="sponsored noopener noreferrer" target="_blank">访问无忧链接官网 →</a>
+        <a class="text-link" href="#pricing">看套餐详情</a>
+      </div>
+    </div>
+
     <section class="disclosure-note">
       <p>
         <strong>推荐关系说明：</strong>本文可能包含指向无忧链接官网的推荐链接（标注 <code>rel="sponsored"</code>）。这不影响我们如实列出优点和缺点的原则，最终是否选择请结合自身需求判断。
@@ -95,7 +106,7 @@ const faqItems = [
       <li><a href="/guide/clash-basics/">Clash基础教程</a>（了解节点、策略组和分流规则）</li>
     </ul>
 
-    <h2>套餐信息</h2>
+    <h2 id="pricing">套餐信息</h2>
     <p class="source-tag">来源：无忧链接官网（wuyoulink.com.cn）公开页面，核实日期 {verifiedDate}，属第三方官网资料，非本站测试数据。套餐内容、价格可能随时变动，请以官网当前页面为准。</p>
     <div class="table-wrap">
       <table>
@@ -180,7 +191,7 @@ const faqItems = [
       无忧链接的套餐结构清晰、入门价格低，是一个可以考虑先小额尝试的选项。但由于本站目前还没有针对它的独立实测数据，建议第一次购买时选择最短的付费周期，实际使用一段时间、自行验证速度和稳定性之后，再决定是否升级到更长周期或更高档位的套餐。
     </p>
     <p>
-      <a class="button" href="https://wuyoulink.com.cn" rel="sponsored noopener noreferrer" target="_blank">访问无忧链接官网</a>
+      <a class="button button-large" href="https://wuyoulink.com.cn" rel="sponsored noopener noreferrer" target="_blank">访问无忧链接官网 →</a>
     </p>
 
     <RelatedLinks related={["airport/how-to-choose-airport", "airport/beginner-choose-airport", "airport/airport-test-metrics", "guide/clash-basics"]} />

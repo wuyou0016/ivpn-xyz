@@ -5,7 +5,7 @@ summary: 稳定的机场通常具备：优先使用专线（IEPL/IPLC）而非�
 pubDate: 2026-09-05
 category: 机场选择
 tags: [机场, 稳定性, 选择指南]
-related: ["airport/how-to-choose-airport", "airport/why-airport-shuts-down", "airport/airport-test-metrics"]
+related: ["airport/how-to-choose-airport", "airport/what-is-ieplc", "airport/why-airport-shuts-down", "airport/airport-test-metrics"]
 ---
 
 ## 为什么稳定性比"速度峰值"更重要
@@ -14,7 +14,7 @@ related: ["airport/how-to-choose-airport", "airport/why-airport-shuts-down", "ai
 
 ## 判断维度一：线路类型
 
-优先关注节点是否使用IEPL/IPLC等国际专线。专线线路是服务商单独采购的私有带宽，不与公网流量混跑，高峰期波动通常明显小于普通BGP中转线路。不过专线成本更高，往往体现在价格或倍率上。
+优先关注节点是否使用[IEPL/IPLC等国际专线](/airport/what-is-ieplc/)。专线线路是服务商单独采购的私有带宽，不与公网流量混跑，高峰期波动通常明显小于普通[BGP中转线路](/airport/what-is-bgp-relay/)。不过专线成本更高，往往体现在价格或倍率上。
 
 ## 判断维度二：晚高峰表现
 
