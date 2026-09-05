@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const title = '关于 ivpn｜VPN 与机场知识博客';
+const description = 'ivpn 是面向中文用户的 VPN、机场与代理工具知识博客：我们是谁、写什么内容、如何处理测试数据和推荐关系。';
+---
+<BaseLayout {title} {description}>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '关于' }]} />
+      <h1>关于 ivpn</h1>
+      <p>ivpn 是一个用中文讲清楚 VPN、机场、代理与客户端知识的小型博客。</p>
+    </div>
+  </section>
+  <article class="prose">
+    <h2>ivpn 是什么</h2>
+    <p>
+      ivpn.xyz 专注于 VPN、机场（代理订阅服务）、梯子、客户端等网络工具相关的知识型内容：概念解释、选择思路、客户端配置教程，以及对具体机场服务的介绍与观察。
+    </p>
+    <h2>服务谁</h2>
+    <p>
+      面向从完全不了解代理/VPN 的新手，到已经在使用机场、想进一步理解节点、协议、稳定性等概念的进阶用户。不同文章会标明适合的阅读起点。
+    </p>
+    <h2>内容原则</h2>
+    <ul>
+      <li>先解释概念，再给建议——不用夸张结论代替读者判断。</li>
+      <li>如实标注信息来源：服务商官网资料、公开资料与本站自己的观察/测试会分开说明，不混为一谈。</li>
+      <li>不编造节点数量、速度、丢包率、用户数、价格、退款政策等具体数据。没有真实测试或数据的地方，会写明"暂无本站实测数据"。</li>
+      <li>服务条款、价格、套餐内容可能随时变动，建议访问服务商官网确认最新信息。</li>
+    </ul>
+    <h2>关于推荐链接</h2>
+    <p>
+      本站目前重点介绍<a href="/airport/wuyou/">无忧链接</a>，其中可能包含带推荐关系的入口链接（标注 <code>rel="sponsored"</code>）。推荐关系不影响我们如实描述优点与缺点的原则，最终选择请读者结合自身需求判断。
+    </p>
+  </article>
+</BaseLayout>

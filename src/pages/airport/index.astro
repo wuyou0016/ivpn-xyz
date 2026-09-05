@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const entries = (await getCollection('airport')).sort(
+  (a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime()
+);
+const title = '机场知识与机场推荐｜ivpn';
+const description = '机场是什么、机场节点/流量/倍率是什么意思、机场为什么限速或跑路，以及新手和进阶用户如何选择机场。';
+---
+<BaseLayout {title} {description}>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '机场知识' }]} />
+      <h1>机场知识</h1>
+      <p>
+        机场是国内对代理服务/订阅服务的通俗叫法。这里整理机场相关的基础概念、常见问题和选择思路，帮助你理解一个机场服务到底在提供什么。想直接看推荐，可以前往
+        <a href="/airport/wuyou/">无忧链接介绍</a>。
+      </p>
+    </div>
+  </section>
+  <section class="wrap list-section">
+    <ul class="article-list plain">
+      {entries.map((entry) => (
+        <li>
+          <a class="article" href={`/airport/${entry.id}/`}>
+            <small>{entry.data.category}</small>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

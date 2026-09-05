@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const entries = (await getCollection('guide')).sort(
+  (a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime()
+);
+const title = '客户端使用教程｜ivpn';
+const description = 'Windows、macOS、Android、iPhone 的代理客户端设置方法，以及 Clash、sing-box 的基础配置教程。';
+---
+<BaseLayout {title} {description}>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '教程' }]} />
+      <h1>客户端使用教程</h1>
+      <p>拿到机场订阅链接后，如何在不同设备上配置客户端。按你使用的系统或客户端选择对应教程。</p>
+    </div>
+  </section>
+  <section class="wrap list-section">
+    <ul class="article-list plain">
+      {entries.map((entry) => (
+        <li>
+          <a class="article" href={`/guide/${entry.id}/`}>
+            <small>{entry.data.category}</small>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

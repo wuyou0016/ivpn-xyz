@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('airport');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, summary, category, tags, pubDate, updatedDate, faq, sources, related } = entry.data;
+---
+<ArticleLayout
+  title={title}
+  description={description}
+  summary={summary}
+  category={category}
+  tags={tags}
+  pubDate={pubDate}
+  updatedDate={updatedDate}
+  faq={faq}
+  sources={sources}
+  related={related}
+  canonicalPath={`/airport/${entry.id}/`}
+  breadcrumb={[
+    { label: '首页', href: '/' },
+    { label: '机场知识', href: '/airport/' },
+    { label: title },
+  ]}
+>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const title = '常用代理客户端与工具｜ivpn';
+const description = '各平台常见的代理客户端软件一览，以及对应的配置教程入口。';
+
+const platforms = [
+  {
+    name: 'Windows',
+    clients: ['Clash Verge', 'v2rayN', 'Clash for Windows（已停止更新，仍有人使用）'],
+    guide: { href: '/guide/windows-proxy-setup/', label: 'Windows 代理设置教程' },
+  },
+  {
+    name: 'macOS',
+    clients: ['ClashX Meta', 'Surge', 'Clash Verge'],
+    guide: { href: '/guide/macos-proxy-setup/', label: 'macOS 代理设置教程' },
+  },
+  {
+    name: 'iOS / iPhone',
+    clients: ['Shadowrocket', 'Stash', 'Quantumult X'],
+    guide: { href: '/guide/iphone-proxy-setup/', label: 'iPhone 代理设置教程' },
+  },
+  {
+    name: 'Android',
+    clients: ['Clash for Android / ClashMetaForAndroid', 'v2rayNG', 'sing-box for Android'],
+    guide: { href: '/guide/android-proxy-setup/', label: 'Android 代理设置教程' },
+  },
+];
+---
+<BaseLayout {title} {description}>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '工具' }]} />
+      <h1>常用代理客户端与工具</h1>
+      <p>
+        客户端是安装在你设备上、用来导入订阅链接并建立连接的软件，机场服务商本身通常不提供客户端。以下是各平台常见的客户端软件，具体版本和界面会随更新变化，请以客户端官方渠道的最新版本为准。
+      </p>
+    </div>
+  </section>
+  <section class="wrap list-section">
+    <div class="tool-grid">
+      {platforms.map((p) => (
+        <div class="tool-card">
+          <h2>{p.name}</h2>
+          <ul>
+            {p.clients.map((c) => (
+              <li>{c}</li>
+            ))}
+          </ul>
+          <a class="text-link" href={p.guide.href}>{p.guide.label} →</a>
+        </div>
+      ))}
+    </div>
+  </section>
+  <section class="wrap list-section">
+    <div class="note">
+      <div aria-hidden="true">◎</div>
+      <div>
+        <b>协议客户端</b>
+        <p>
+          如果你的机场支持 sing-box 内核或需要手动配置协议参数，可以参考
+          <a href="/guide/singbox-basics/">sing-box 基础教程</a> 或
+          <a href="/guide/clash-basics/">Clash 基础教程</a>。
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

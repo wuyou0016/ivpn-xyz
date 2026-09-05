@@ -1,0 +1,84 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import ArticleMeta from '../components/ArticleMeta.astro';
+import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  summary: string;
+  category: string;
+  tags: string[];
+  pubDate: Date;
+  updatedDate?: Date;
+  faq?: { q: string; a: string }[];
+  sources?: { label: string; url?: string }[];
+  related: string[];
+  breadcrumb: Crumb[];
+  canonicalPath: string;
+}
+
+const {
+  title,
+  description,
+  summary,
+  category,
+  tags,
+  pubDate,
+  updatedDate,
+  faq,
+  sources,
+  related,
+  breadcrumb,
+  canonicalPath,
+} = Astro.props as Props;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  inLanguage: 'zh-CN',
+  mainEntityOfPage: new URL(canonicalPath, 'https://ivpn.xyz').href,
+  publisher: {
+    '@type': 'Organization',
+    name: 'ivpn',
+    url: 'https://ivpn.xyz/',
+  },
+};
+---
+<BaseLayout title={`${title}｜ivpn`} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} slot="head" />
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb items={breadcrumb} />
+      <h1>{title}</h1>
+      <p class="summary">{summary}</p>
+    </div>
+  </section>
+  <article class="prose">
+    <ArticleMeta category={category} tags={tags} pubDate={pubDate} updatedDate={updatedDate} />
+    <slot />
+    {faq && faq.length > 0 && <FAQ items={faq} />}
+    {sources && sources.length > 0 && (
+      <section class="sources">
+        <h2>参考来源</h2>
+        <ul>
+          {sources.map((s) => (
+            <li>{s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a> : s.label}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+    <RelatedLinks related={related} />
+  </article>
+</BaseLayout>

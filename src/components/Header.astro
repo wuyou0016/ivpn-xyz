@@ -1,0 +1,24 @@
+---
+const nav = [
+  { href: '/vpn/', label: 'VPN知识' },
+  { href: '/airport/', label: '机场知识' },
+  { href: '/airport/wuyou/', label: '无忧链接', highlight: true },
+  { href: '/guide/', label: '教程' },
+  { href: '/tools/', label: '工具' },
+  { href: '/about/', label: '关于' },
+];
+const path = Astro.url.pathname;
+---
+<header class="site-header">
+  <a class="brand" href="/" aria-label="ivpn 首页"><span class="brand-mark">i</span><span>ivpn</span></a>
+  <nav aria-label="主导航">
+    {nav.map((item) => (
+      <a
+        href={item.href}
+        class:list={[{ active: path === item.href || (item.href !== '/' && path.startsWith(item.href)), highlight: item.highlight }]}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>

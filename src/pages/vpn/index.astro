@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const entries = (await getCollection('vpn')).sort(
+  (a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime()
+);
+const title = 'VPN 基础知识｜ivpn';
+const description = 'VPN 是什么、有什么用、和代理/机场的区别、是否安全——从概念开始，理清 VPN 相关的基础问题。';
+---
+<BaseLayout {title} {description}>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: 'VPN知识' }]} />
+      <h1>VPN 基础知识</h1>
+      <p>
+        这里整理 VPN 相关的基础概念：它是什么、能做什么、和代理、机场、梯子这些词有什么区别，以及使用中常见的安全问题。建议先从"VPN是什么"开始阅读。
+      </p>
+    </div>
+  </section>
+  <section class="wrap list-section">
+    <ul class="article-list plain">
+      {entries.map((entry) => (
+        <li>
+          <a class="article" href={`/vpn/${entry.id}/`}>
+            <small>{entry.data.category}</small>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

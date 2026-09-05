@@ -1,0 +1,25 @@
+---
+interface Props {
+  category: string;
+  tags: string[];
+  pubDate: Date;
+  updatedDate?: Date;
+}
+const { category, tags, pubDate, updatedDate } = Astro.props as Props;
+const fmt = (d: Date) =>
+  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<div class="article-meta">
+  <span class="category">{category}</span>
+  <span class="dates">
+    发布于 {fmt(pubDate)}
+    {updatedDate && updatedDate.getTime() !== pubDate.getTime() && <> · 更新于 {fmt(updatedDate)}</>}
+  </span>
+  {tags.length > 0 && (
+    <ul class="tags">
+      {tags.map((t) => (
+        <li>{t}</li>
+      ))}
+    </ul>
+  )}
+</div>

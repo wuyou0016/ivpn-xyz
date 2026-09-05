@@ -1,0 +1,41 @@
+---
+import { getEntry } from 'astro:content';
+
+interface Props {
+  related: string[];
+}
+const { related } = Astro.props as Props;
+
+type Collection = 'vpn' | 'airport' | 'guide';
+
+const resolved = (
+  await Promise.all(
+    related.map(async (ref) => {
+      const [collection, slug] = ref.split('/') as [Collection, string];
+      if (collection === 'airport' && slug === 'wuyou') {
+        return {
+          href: '/airport/wuyou/',
+          title: '无忧链接：介绍、优缺点与使用教程',
+          description: '本站重点介绍的机场服务，包含套餐信息、适合人群与常见问题。',
+        };
+      }
+      const entry = await getEntry(collection, slug);
+      if (!entry) return null;
+      return { href: `/${collection}/${entry.id}/`, title: entry.data.title, description: entry.data.summary };
+    })
+  )
+).filter((x): x is { href: string; title: string; description: string } => x !== null);
+---
+{resolved.length > 0 && (
+  <section class="related-links">
+    <h2>相关内容</h2>
+    <ul>
+      {resolved.map((item) => (
+        <li>
+          <a href={item.href}>{item.title}</a>
+          <p>{item.description}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

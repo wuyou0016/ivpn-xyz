@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const vpnEntries = await getCollection('vpn');
+const airportEntries = await getCollection('airport');
+const guideEntries = await getCollection('guide');
+
+const allEntries = [
+  ...vpnEntries.map((e) => ({ ...e, collection: 'vpn' as const })),
+  ...airportEntries.map((e) => ({ ...e, collection: 'airport' as const })),
+  ...guideEntries.map((e) => ({ ...e, collection: 'guide' as const })),
+].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const latest = allEntries.slice(0, 6);
+
+const title = 'ivpn｜VPN、机场与网络工具知识博客';
+const description = 'ivpn 用简单的中文讲清楚 VPN、机场、代理、节点与客户端的基础知识，并提供机场选择思路与无忧链接等服务的介绍。';
+---
+<BaseLayout {title} {description}>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">ivpn 知识博客</span>
+        <h1>VPN、机场与网络工具知识</h1>
+        <p class="lead">
+          从 VPN 基础知识，到机场选择、代理工具和客户端教程，用简单易懂的方式帮助你理解和选择网络工具。
+        </p>
+        <div class="actions">
+          <a class="button" href="/vpn/">从VPN基础知识开始</a>
+          <a class="button ghost" href="/airport/wuyou/">看无忧链接介绍</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="node one"></span><span class="node two"></span><span class="node three"></span>
+        <p>先理解概念，再决定怎么选。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-heading">
+        <div><span class="eyebrow">VPN知识</span><h2>VPN基础概念</h2></div>
+        <a class="text-link" href="/vpn/">查看全部 →</a>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="/vpn/what-is-vpn/"><span class="icon">◌</span><h3>VPN是什么</h3><p>了解VPN的基本原理和最初的设计目的。</p></a>
+        <a class="card" href="/vpn/vpn-vs-proxy/"><span class="icon">⌁</span><h3>VPN和代理有什么区别</h3><p>从加密范围和使用层级理解两者的差异。</p></a>
+        <a class="card" href="/vpn/is-vpn-safe/"><span class="icon">◎</span><h3>VPN安全吗</h3><p>了解使用VPN真正需要关注的安全和隐私风险。</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-heading">
+        <div><span class="eyebrow">机场知识</span><h2>机场是什么，怎么选</h2></div>
+        <a class="text-link" href="/airport/">查看全部 →</a>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="/airport/what-is-airport/"><span class="icon">↗</span><h3>机场是什么</h3><p>了解机场服务的基本形态和使用流程。</p></a>
+        <a class="card" href="/airport/how-to-choose-airport/"><span class="icon">◌</span><h3>机场怎么选择</h3><p>从稳定性、速度、价格等维度建立选择框架。</p></a>
+        <a class="card" href="/airport/airport-test-metrics/"><span class="icon">⌁</span><h3>机场应该测试哪些指标</h3><p>学会自己判断一个机场的真实质量。</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="recommendation">
+        <span class="eyebrow">机场推荐 · 重点介绍</span>
+        <h2>无忧链接：本站目前重点介绍的机场服务</h2>
+        <p>
+          套餐从¥6/月起，覆盖40GB到200GB三个档位。我们把官网的宣传资料和本站的独立观察分开标注，暂无实测数据的部分会如实写明，不做夸大宣传。
+        </p>
+        <a class="button" href="/airport/wuyou/">查看无忧链接详细介绍 →</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-heading">
+        <div><span class="eyebrow">最近更新</span><h2>最新文章</h2></div>
+      </div>
+      <div class="article-list">
+        {latest.map((entry) => (
+          <a class="article" href={`/${entry.collection}/${entry.id}/`}>
+            <small>{entry.data.category}</small>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.summary}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-heading">
+        <div><span class="eyebrow">实用教程</span><h2>客户端配置教程</h2></div>
+        <a class="text-link" href="/guide/">查看全部 →</a>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="/guide/windows-proxy-setup/"><span class="icon">⌁</span><h3>Windows代理设置</h3><p>用Clash Verge导入订阅链接的完整步骤。</p></a>
+        <a class="card" href="/guide/iphone-proxy-setup/"><span class="icon">↗</span><h3>iPhone代理设置</h3><p>Shadowrocket的获取与配置方法。</p></a>
+        <a class="card" href="/guide/clash-basics/"><span class="icon">◎</span><h3>Clash基础教程</h3><p>理解订阅、策略组和分流规则。</p></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
