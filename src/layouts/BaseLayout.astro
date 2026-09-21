@@ -7,10 +7,13 @@ interface Props {
   title: string;
   description: string;
   robots?: string;
+  ogType?: 'website' | 'article';
+  headerNote?: string;
 }
 
-const { title, description, robots = 'index, follow' } = Astro.props;
+const { title, description, robots = 'index, follow', ogType = 'website', headerNote } = Astro.props;
 const canonical = new URL(Astro.url.pathname, 'https://ivpn.xyz').href;
+const isHome = Astro.url.pathname === '/';
 
 const siteSchema = {
   '@context': 'https://schema.org',
@@ -25,6 +28,7 @@ const orgSchema = {
   '@type': 'Organization',
   name: 'ivpn',
   url: 'https://ivpn.xyz/',
+  logo: 'https://ivpn.xyz/favicon.svg',
 };
 ---
 <!doctype html>
@@ -32,24 +36,34 @@ const orgSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0c0f13" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="robots" content={robots} />
-    <meta property="og:type" content="website" />
+    <meta name="robots" content={`${robots}, max-image-preview:large`} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="ivpn" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="zh_CN" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://ivpn.xyz/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ivpn：机场推荐、套餐对比与 VPN 知识" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://ivpn.xyz/og.png" />
     <link rel="alternate" type="application/rss+xml" title="ivpn RSS" href="/rss.xml" />
-    <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />}
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />}
     <slot name="head" />
   </head>
   <body>
-    <Header />
+    <Header note={headerNote} />
     <main><slot /></main>
     <Footer />
   </body>

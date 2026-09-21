@@ -1,0 +1,132 @@
+---
+import { sourceBadge, type Service } from '../data/services';
+
+interface Props {
+  items: Service[];
+  idPrefix?: string;
+}
+const { items, idPrefix = 'dir' } = Astro.props;
+
+const groupsOf = (s: Service) => {
+  const g: string[] = [];
+  if (s.tags.some((t) => /IPLC|IEPL|专线/.test(t))) g.push('line');
+  if (s.tags.some((t) => /年付/.test(t)) || /年付/.test(s.priceBasis)) g.push('yearly');
+  if (s.sourceLevel === 'entry') g.push('limited');
+  if (s.page) g.push('page');
+  return g.join(' ');
+};
+---
+<div class="toolbar">
+  <label class="search-box">
+    <span aria-hidden="true">⌕</span>
+    <input id={`${idPrefix}-search`} type="search" placeholder="搜索名称、线路、协议或节点地区" autocomplete="off" aria-label="搜索服务" />
+  </label>
+  <select id={`${idPrefix}-sort`} class="sort-box" aria-label="排序方式">
+    <option value="default">默认顺序（编辑顺序）</option>
+    <option value="price">起步月均价（低到高，口径不同仅供参考）</option>
+  </select>
+</div>
+<div class="filter-chips" id={`${idPrefix}-filters`} role="group" aria-label="快速筛选">
+  <button type="button" data-filter="all" aria-pressed="true">全部</button>
+  <button type="button" data-filter="line" aria-pressed="false">专线线路</button>
+  <button type="button" data-filter="yearly" aria-pressed="false">年付资料</button>
+  <button type="button" data-filter="page" aria-pressed="false">有详情页</button>
+  <button type="button" data-filter="limited" aria-pressed="false">资料有限</button>
+</div>
+
+<div class="svc-list" id={`${idPrefix}-list`}>
+  {items.map((s, i) => {
+    const top = s.id === 'wuyou';
+    const search = [s.name, s.line, s.protocols, s.nodes, s.tags.join(' '), s.tagline].join(' ').toLowerCase();
+    return (
+      <article
+        class:list={['svc', { top }]}
+        data-order={i}
+        data-price={s.startMonthly ?? ''}
+        data-groups={groupsOf(s)}
+        data-search={search}
+      >
+        <span class="logo-tile" style={`--h:${s.hue}`} aria-hidden="true">{s.mark}</span>
+        <div class="svc-body">
+          <div class="svc-title">
+            <h3>{s.page ? <a href={s.page} style="color:inherit;text-decoration:none">{s.name}</a> : s.name}</h3>
+            {top && <span class="chip gold">本站重点介绍</span>}
+            <span class={`chip src-${s.sourceLevel}`}>{sourceBadge[s.sourceLevel]}</span>
+          </div>
+          <p class="svc-tag">{s.tagline}</p>
+          <div class="svc-tags">{s.tags.filter((t) => t !== '本站重点介绍').map((t) => <span class="chip">{t}</span>)}</div>
+          {s.sourceLevel !== 'entry' && (
+            <dl class="svc-spec">
+              <div><dt>线路</dt><dd>{s.line}</dd></div>
+              <div><dt>协议</dt><dd>{s.protocols}</dd></div>
+              <div><dt>节点地区</dt><dd>{s.nodes}</dd></div>
+            </dl>
+          )}
+          <p class="svc-caution"><strong style="color:var(--soft)">购买前留意：</strong>{s.caution}</p>
+        </div>
+        <div class="svc-side">
+          <div class="svc-price">{s.priceText}<small>{s.priceBasis}</small></div>
+          {s.page && <a class="button ghost" href={s.page}>查看资料与套餐</a>}
+          <a
+            class:list={['button', { gold: top }]}
+            href={s.aff}
+            target="_blank"
+            rel="nofollow noopener sponsored"
+            data-svc={s.id}
+          >
+            {top ? '访问无忧链接 ↗' : '前往官网 ↗'}
+          </a>
+        </div>
+      </article>
+    );
+  })}
+</div>
+<p class="dir-empty" id={`${idPrefix}-empty`}>没有匹配的服务，换个关键词或清除筛选试试。</p>
+
+<script define:vars={{ idPrefix }}>
+  (function () {
+    var list = document.getElementById(idPrefix + '-list');
+    if (!list) return;
+    var cards = Array.prototype.slice.call(list.children);
+    var search = document.getElementById(idPrefix + '-search');
+    var sort = document.getElementById(idPrefix + '-sort');
+    var chips = document.querySelectorAll('#' + idPrefix + '-filters button');
+    var empty = document.getElementById(idPrefix + '-empty');
+    var active = 'all';
+    function apply() {
+      var q = (search.value || '').trim().toLowerCase();
+      var shown = 0;
+      cards.forEach(function (c) {
+        var okQ = !q || c.getAttribute('data-search').indexOf(q) !== -1;
+        var okF = active === 'all' || (' ' + c.getAttribute('data-groups') + ' ').indexOf(' ' + active + ' ') !== -1;
+        c.hidden = !(okQ && okF);
+        if (!c.hidden) shown++;
+      });
+      empty.style.display = shown ? 'none' : 'block';
+    }
+    function reorder() {
+      var by = sort.value;
+      var sorted = cards.slice().sort(function (a, b) {
+        if (by === 'price') {
+          var pa = parseFloat(a.getAttribute('data-price')), pb = parseFloat(b.getAttribute('data-price'));
+          var na = isNaN(pa), nb = isNaN(pb);
+          if (na && nb) return a.getAttribute('data-order') - b.getAttribute('data-order');
+          if (na) return 1;
+          if (nb) return -1;
+          if (pa !== pb) return pa - pb;
+        }
+        return a.getAttribute('data-order') - b.getAttribute('data-order');
+      });
+      sorted.forEach(function (c) { list.appendChild(c); });
+    }
+    search.addEventListener('input', apply);
+    sort.addEventListener('change', reorder);
+    chips.forEach(function (b) {
+      b.addEventListener('click', function () {
+        active = b.getAttribute('data-filter');
+        chips.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        apply();
+      });
+    });
+  })();
+</script>

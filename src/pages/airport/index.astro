@@ -6,23 +6,41 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 const entries = (await getCollection('airport')).sort(
   (a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime()
 );
-const title = '机场知识与机场推荐｜ivpn';
-const description = '机场是什么、机场节点/流量/倍率是什么意思、机场为什么限速或跑路，以及新手和进阶用户如何选择机场。';
+const buying = entries.filter((e) => e.data.category === '机场选择' || e.data.category === '选购指南');
+const knowledge = entries.filter((e) => !buying.includes(e));
+
+const title = '机场选购指南与机场知识｜ivpn';
+const description =
+  '机场是什么、节点/流量/倍率是什么意思、为什么限速或跑路，以及月付还是年付、怎么算性价比、购买前怎么核对，新手和进阶用户的机场选购指南。';
 ---
 <BaseLayout {title} {description}>
   <section class="page-head">
     <div class="wrap">
-      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '机场知识' }]} />
-      <h1>机场知识</h1>
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '选购与机场知识' }]} />
+      <h1>机场选购指南与机场知识</h1>
       <p>
-        机场是国内对代理服务/订阅服务的通俗叫法。这里整理机场相关的基础概念、常见问题和选择思路，帮助你理解一个机场服务到底在提供什么。想直接看推荐，可以前往
-        <a href="/airport/wuyou/">无忧链接介绍</a>。
+        机场是国内对代理订阅服务的通俗叫法。这里先讲怎么选、怎么核对，再讲基础概念和常见问题。想直接看各家的套餐与线路资料，可以去<a href="/recommend/">机场推荐与套餐对比</a>，或先读<a href="/airport/wuyou/">无忧链接介绍</a>。
       </p>
     </div>
   </section>
   <section class="wrap list-section">
+    <div class="section-heading"><div><span class="eyebrow">购买前先读</span><h2>选购指南</h2></div></div>
     <ul class="article-list plain">
-      {entries.map((entry) => (
+      {buying.map((entry) => (
+        <li>
+          <a class="article" href={`/airport/${entry.id}/`}>
+            <small>{entry.data.category}</small>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+  <section class="wrap list-section" style="padding-top:0">
+    <div class="section-heading"><div><span class="eyebrow">概念与常见问题</span><h2>机场知识</h2></div></div>
+    <ul class="article-list plain">
+      {knowledge.map((entry) => (
         <li>
           <a class="article" href={`/airport/${entry.id}/`}>
             <small>{entry.data.category}</small>

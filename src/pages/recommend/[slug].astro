@@ -1,0 +1,105 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import FAQ from '../../components/FAQ.astro';
+import ServiceParts from '../../components/ServiceParts.astro';
+import { services, byId, DATA_DATE, type Service } from '../../data/services';
+
+export function getStaticPaths() {
+  return services
+    .filter((s) => s.page && s.page.startsWith('/recommend/'))
+    .map((s) => ({ params: { slug: s.page!.split('/').filter(Boolean)[1] }, props: { id: s.id } }));
+}
+
+const { id } = Astro.props as { id: string };
+const s: Service = byId(id);
+const path = s.page!;
+
+// 每个服务挑 3 篇最相关的选购/知识文章
+const guideMap: Record<string, string[]> = {
+  weifeng: ['airport/how-to-choose-airport', 'airport/first-purchase-checklist', 'airport/what-is-ieplc'],
+  feimao: ['airport/cost-effective-airport', 'airport/first-purchase-checklist', 'airport/what-is-ieplc'],
+  firefly: ['airport/monthly-vs-yearly-airport', 'airport/first-purchase-checklist', 'airport/airport-test-metrics'],
+  guangsu: ['guide/clash-basics', 'airport/first-purchase-checklist', 'airport/what-is-ieplc'],
+  yuzhou: ['airport/airport-for-ai-tools', 'airport/stable-airport-criteria', 'airport/first-purchase-checklist'],
+  lingmao: ['airport/proxy-protocols-comparison', 'airport/first-purchase-checklist', 'airport/monthly-vs-yearly-airport'],
+  shanyue: ['airport/monthly-vs-yearly-airport', 'airport/airport-test-metrics', 'airport/first-purchase-checklist'],
+};
+const guideRefs = guideMap[s.id] ?? ['airport/how-to-choose-airport', 'airport/first-purchase-checklist', 'airport/airport-test-metrics'];
+const guides = (
+  await Promise.all(
+    guideRefs.map(async (ref) => {
+      const [col, slug] = ref.split('/') as ['airport' | 'guide', string];
+      const e = await getEntry(col, slug);
+      return e ? { href: `/${col}/${e.id}/`, title: e.data.title } : null;
+    })
+  )
+).filter((x): x is { href: string; title: string } => x !== null);
+const neighbors = s.neighbors.map((n) => byId(n)).filter((n) => n.page);
+
+const h1 = `${s.name}怎么样？套餐、线路与购买前要确认的事`;
+const title = `${s.name}怎么样？套餐价格、线路与节点资料｜ivpn`;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: h1,
+  description: s.description,
+  datePublished: DATA_DATE,
+  dateModified: DATA_DATE,
+  inLanguage: 'zh-CN',
+  mainEntityOfPage: new URL(path, 'https://ivpn.xyz').href,
+  author: { '@type': 'Organization', name: 'ivpn', url: 'https://ivpn.xyz/' },
+  publisher: { '@type': 'Organization', name: 'ivpn', url: 'https://ivpn.xyz/' },
+};
+---
+<BaseLayout {title} description={s.description} ogType="article" headerNote="套餐、参数与限制">
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} slot="head" />
+  <div class="wrap detail">
+    <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '机场推荐', href: '/recommend/' }, { label: s.name }]} />
+    <ServiceParts service={s} part="hero" h1={h1} />
+
+    <section class="dsec detail-prose" aria-labelledby="ov">
+      <h2 id="ov">服务概览</h2>
+      {s.overview.map((p) => <p>{p}</p>)}
+    </section>
+
+    <ServiceParts service={s} part="status" />
+    <ServiceParts service={s} part="specs" />
+
+    <section class="dsec" aria-labelledby="pc">
+      <h2 id="pc">适合关注与需要留意</h2>
+      <div class="pros-cons">
+        <div class="pro">
+          <h3>适合关注</h3>
+          <ul>{s.pros.map((x) => <li>{x}</li>)}</ul>
+        </div>
+        <div class="con">
+          <h3>购买前留意</h3>
+          <ul>{s.cons.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <ServiceParts service={s} part="plans" />
+
+    <section class="dsec" aria-labelledby="cf">
+      <h2 id="cf">下单前先确认这几件事</h2>
+      <ol class="check-list">{s.checkFirst.map((x) => <li>{x}</li>)}</ol>
+    </section>
+
+    <div class="dsec"><FAQ items={s.faq} /></div>
+
+    <section class="dsec" aria-labelledby="rl">
+      <h2 id="rl">继续比较与阅读</h2>
+      <div class="related-grid">
+        {guides.map((g) => <a href={g.href}><span>选购与知识</span><strong>{g.title}</strong></a>)}
+        {neighbors.map((n) => <a href={n.page}><span>相邻服务</span><strong>{n.name}套餐与线路资料</strong></a>)}
+        <a href="/recommend/"><span>返回目录</span><strong>机场推荐与套餐对比</strong></a>
+      </div>
+    </section>
+
+    <ServiceParts service={s} part="cta" />
+  </div>
+</BaseLayout>

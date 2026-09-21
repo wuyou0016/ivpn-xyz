@@ -1,51 +1,92 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import FAQ from '../../components/FAQ.astro';
 
-const title = '常用代理客户端与工具｜ivpn';
-const description = '各平台常见的代理客户端软件一览，以及对应的配置教程入口。';
+const title = '代理客户端下载与选择：Windows、macOS、iPhone、Android｜ivpn';
+const description =
+  '各平台常见的代理客户端：Clash Verge Rev、v2rayN、sing-box、Shadowrocket、v2rayNG 等的官方发布入口，以及如何核对来源、避开来路不明的安装包，并附各系统配置教程。';
 
-const platforms = [
+interface Client {
+  name: string;
+  note: string;
+  href: string;
+  where: string;
+}
+const platforms: { name: string; guide: { href: string; label: string }; clients: Client[] }[] = [
   {
     name: 'Windows',
-    clients: ['Clash Verge', 'v2rayN', 'Clash for Windows（已停止更新，仍有人使用）'],
     guide: { href: '/guide/windows-proxy-setup/', label: 'Windows 代理设置教程' },
+    clients: [
+      { name: 'Clash Verge Rev', note: '图形界面，导入订阅链接即可使用', href: 'https://github.com/clash-verge-rev/clash-verge-rev/releases', where: '项目 GitHub Releases' },
+      { name: 'v2rayN', note: '支持多种协议，适合习惯 V2Ray 系列的用户', href: 'https://github.com/2dust/v2rayN/releases', where: '项目 GitHub Releases' },
+    ],
   },
   {
     name: 'macOS',
-    clients: ['ClashX Meta', 'Surge', 'Clash Verge'],
     guide: { href: '/guide/macos-proxy-setup/', label: 'macOS 代理设置教程' },
+    clients: [
+      { name: 'Clash Verge Rev', note: '同样有 macOS 版本', href: 'https://github.com/clash-verge-rev/clash-verge-rev/releases', where: '项目 GitHub Releases' },
+      { name: 'sing-box', note: '通用内核，提供官方文档与发布包', href: 'https://sing-box.sagernet.org/', where: '官方文档站' },
+    ],
   },
   {
-    name: 'iOS / iPhone',
-    clients: ['Shadowrocket', 'Stash', 'Quantumult X'],
+    name: 'iPhone / iPad',
     guide: { href: '/guide/iphone-proxy-setup/', label: 'iPhone 代理设置教程' },
+    clients: [
+      { name: 'Shadowrocket', note: '付费应用，订阅导入直观；部分地区的 App Store 不可用', href: 'https://apps.apple.com/app/shadowrocket/id932747118', where: 'App Store（核对开发者名称）' },
+    ],
   },
   {
     name: 'Android',
-    clients: ['Clash for Android / ClashMetaForAndroid', 'v2rayNG', 'sing-box for Android'],
     guide: { href: '/guide/android-proxy-setup/', label: 'Android 代理设置教程' },
+    clients: [
+      { name: 'v2rayNG', note: '常见的开源客户端，支持多种协议', href: 'https://github.com/2dust/v2rayNG/releases', where: '项目 GitHub Releases' },
+      { name: 'Clash Meta for Android', note: 'Clash 系客户端，可导入订阅', href: 'https://github.com/MetaCubeX/ClashMetaForAndroid/releases', where: '项目 GitHub Releases' },
+    ],
+  },
+];
+
+const faq = [
+  {
+    q: '机场服务商会提供客户端吗？',
+    a: '大多数机场只提供订阅链接，客户端需要自己安装；少数服务商有自研客户端，使用第三方客户端可能要联系客服。购买前先确认你想用的客户端能不能导入。',
+  },
+  {
+    q: '安装包应该从哪里下载？',
+    a: '优先选择项目自己的发布页（如 GitHub Releases）或官方应用商店，不要用网盘里转发的安装包。下载后核对文件名与发布页一致，也不要安装来源不明的“破解版”。',
+  },
+  {
+    q: 'Clash for Windows 还能用吗？',
+    a: 'Clash for Windows 已经停止更新，新用户建议选择仍在维护的客户端，例如 Clash Verge Rev 或 v2rayN。',
   },
 ];
 ---
 <BaseLayout {title} {description}>
   <section class="page-head">
     <div class="wrap">
-      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '工具' }]} />
-      <h1>常用代理客户端与工具</h1>
+      <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '客户端' }]} />
+      <h1>代理客户端下载与选择</h1>
       <p>
-        客户端是安装在你设备上、用来导入订阅链接并建立连接的软件，机场服务商本身通常不提供客户端。以下是各平台常见的客户端软件，具体版本和界面会随更新变化，请以客户端官方渠道的最新版本为准。
+        客户端是装在设备上、用来导入订阅链接并建立连接的软件，机场服务商本身通常不提供。下面列出各平台常见的客户端和它们的官方发布入口；版本和界面会随更新变化，请以官方渠道的最新版本为准。
       </p>
     </div>
   </section>
   <section class="wrap list-section">
+    <div class="access-note">
+      <span aria-hidden="true">i</span>
+      <span>下载入口打不开，通常是所在网络受限。已有代理请先开启；没有代理时，可以先在<a href="/recommend/">机场推荐</a>里选一个服务，拿到订阅后再回来下载客户端。</span>
+    </div>
     <div class="tool-grid">
       {platforms.map((p) => (
         <div class="tool-card">
           <h2>{p.name}</h2>
           <ul>
             {p.clients.map((c) => (
-              <li>{c}</li>
+              <li>
+                <a href={c.href} target="_blank" rel="noopener noreferrer">{c.name} ↗</a>
+                <small>{c.note} · 来源：{c.where}</small>
+              </li>
             ))}
           </ul>
           <a class="text-link" href={p.guide.href}>{p.guide.label} →</a>
@@ -53,17 +94,18 @@ const platforms = [
       ))}
     </div>
   </section>
-  <section class="wrap list-section">
+  <section class="wrap list-section" style="padding-top:0">
     <div class="note">
       <div aria-hidden="true">◎</div>
       <div>
-        <b>协议客户端</b>
+        <b>协议与内核</b>
         <p>
-          如果你的机场支持 sing-box 内核或需要手动配置协议参数，可以参考
-          <a href="/guide/singbox-basics/">sing-box 基础教程</a> 或
-          <a href="/guide/clash-basics/">Clash 基础教程</a>。
+          如果你的机场支持 sing-box 内核，或需要手动填写协议参数，可以参考<a href="/guide/singbox-basics/">sing-box 基础教程</a>和<a href="/guide/clash-basics/">Clash 基础教程</a>。协议之间的区别见<a href="/airport/proxy-protocols-comparison/">常见代理协议对比</a>。
         </p>
       </div>
     </div>
+  </section>
+  <section class="wrap list-section" style="padding-top:0">
+    <FAQ items={faq} />
   </section>
 </BaseLayout>

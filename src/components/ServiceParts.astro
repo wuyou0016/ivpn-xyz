@@ -1,0 +1,119 @@
+---
+// 详情页的可复用片段：part = hero | status | specs | plans | cta
+import { sourceBadge, DATA_DATE, type Service } from '../data/services';
+
+interface Props {
+  service: Service;
+  part: 'hero' | 'status' | 'specs' | 'plans' | 'cta';
+  h1?: string;
+  verifiedNote?: string;
+}
+const { service: s, part, h1, verifiedNote } = Astro.props;
+const top = s.id === 'wuyou';
+// 只有字段“本身缺失”才算缺口（以这些词开头），正文里顺带提到“某来源未列出”不算
+const gapRe = /^(第三方资料未列出|资料未列出|暂无可核实|资料缺失|来源冲突)/;
+
+const status = [
+  {
+    label: '价格资料',
+    value: s.sourceLevel === 'official' ? `官网价格页已核对（${DATA_DATE}）` : s.plans.length > 0 ? '第三方资料，已标注口径' : '资料缺失',
+    gap: s.sourceLevel !== 'official' && s.plans.length === 0,
+  },
+  { label: '线路说明', value: gapRe.test(s.line) ? '资料缺失' : '有（来自服务商或资料表述）', gap: gapRe.test(s.line) },
+  { label: '协议', value: /冲突/.test(s.protocols) ? '来源之间互相矛盾' : gapRe.test(s.protocols) ? '资料缺失' : '资料已列出', gap: gapRe.test(s.protocols) },
+  { label: '客户端', value: gapRe.test(s.client) ? '资料缺失' : '资料已列出', gap: gapRe.test(s.client) },
+  { label: '本站实测', value: '暂无（本站未做测速）', gap: true },
+];
+const specs = [
+  { label: '线路', value: s.line },
+  { label: '协议', value: s.protocols },
+  { label: '节点地区', value: s.nodes },
+  { label: '客户端', value: s.client },
+  ...(s.extra ?? []),
+  { label: '适合谁', value: s.fit },
+  { label: '资料来源', value: s.sourceLabel },
+];
+---
+{part === 'hero' && (
+  <section class:list={['detail-hero', { top }]}>
+    <span class="logo-tile lg" style={`--h:${s.hue}`} aria-hidden="true">{s.mark}</span>
+    <div>
+      <h1>{h1}</h1>
+      <p class="detail-tag">{s.tagline}</p>
+      <div class="detail-meta">
+        <span class={`chip src-${s.sourceLevel}`}>{sourceBadge[s.sourceLevel]}</span>
+        <span class="chip">{s.priceText}</span>
+        <span class="chip">资料整理 {DATA_DATE}</span>
+        {s.tags.filter((t) => t !== '本站重点介绍').map((t) => <span class="chip">{t}</span>)}
+      </div>
+    </div>
+    <div class="hero-buy">
+      <a class:list={['button', 'button-large', { gold: top }]} href={s.aff} target="_blank" rel="nofollow noopener sponsored" data-svc={s.id}>
+        {top ? '访问无忧链接官网 ↗' : `前往${s.name}官网 ↗`}
+      </a>
+      <small>注册后请记好账号（邮箱）和密码，并收藏本站，避免入口变动后找不到。{verifiedNote}</small>
+    </div>
+  </section>
+)}
+
+{part === 'status' && (
+  <section class="dsec" aria-labelledby={`st-${s.id}`}>
+    <h2 id={`st-${s.id}`}>资料核对状态</h2>
+    <div class="status-grid">
+      {status.map((x) => (
+        <div class:list={['status', { gap: x.gap }]}>
+          <span>{x.label}</span>
+          <strong>{x.value}</strong>
+        </div>
+      ))}
+    </div>
+    <p style="margin-top:10px;color:var(--muted);font-size:.86rem">这一栏说明“哪些资料已经核对、哪些还缺”，不是评分，也不是测速结果。</p>
+  </section>
+)}
+
+{part === 'specs' && (
+  <section class="dsec" aria-labelledby={`sp-${s.id}`}>
+    <h2 id={`sp-${s.id}`}>服务参数</h2>
+    <dl class="spec-list">
+      {specs.map((x) => (
+        <div class="spec-row"><dt>{x.label}</dt><dd>{x.value}</dd></div>
+      ))}
+    </dl>
+  </section>
+)}
+
+{part === 'plans' && s.plans.length > 0 && (
+  <section class="dsec" aria-labelledby={`pl-${s.id}`}>
+    <h2 id={`pl-${s.id}`}>已知套餐档位</h2>
+    <p style="color:var(--muted);font-size:.9rem">这里只列出资料里明确出现的档位，完整套餐、库存与活动价格以官网结算页为准。</p>
+    <div class="plan-wrap">
+      <table class="plans-table">
+        <thead><tr><th>档位</th><th>计费</th><th>流量</th><th>价格</th><th>说明</th></tr></thead>
+        <tbody>
+          {s.plans.map((p) => (
+            <tr><td>{p.name}</td><td>{p.billing}</td><td>{p.traffic}</td><td class="price">{p.price}</td><td>{p.note ?? '—'}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+)}
+
+{part === 'cta' && (
+  <>
+    <section class="cta-band">
+      <div>
+        <h2>前往{s.name}服务页面</h2>
+        <p>建议先选最短周期验证线路、客户端和常用地区，再决定是否升级。</p>
+      </div>
+      <a class:list={['button', 'button-large', { gold: top }]} href={s.aff} target="_blank" rel="nofollow noopener sponsored" data-svc={s.id}>
+        查看{s.name}套餐 →
+      </a>
+    </section>
+    <div class="disclaimer">
+      <p>资料来源：{s.sourceLabel} · 整理于 {DATA_DATE}。除无忧链接官网价格页外，其余资料未逐项重新核对官网，请以下单页面为准。</p>
+      <p>本页不含评分或排名：本站没有对该服务做过统一条件下的测速，页面中的线路、协议、节点、解锁等均为官方或第三方资料的表述。</p>
+      <p>本页含推荐链接（rel=sponsored），通过链接注册可能为本站带来返佣，不会增加你的购买价格。可用性受地区、运营商、设备与时段影响。</p>
+    </div>
+  </>
+)}

@@ -36,14 +36,17 @@ function buildArticleLastmodMap() {
 const articleLastmod = buildArticleLastmodMap();
 // 非文章页的最近一次实质性改动日期，人工维护，反映真实更新时间。
 const staticPageLastmod = {
-  '/': '2026-09-06',
+  '/': '2026-09-21',
   '/vpn/': '2026-09-05',
-  '/airport/': '2026-09-05',
-  '/airport/wuyou/': '2026-09-06',
+  '/airport/': '2026-09-21',
+  '/airport/wuyou/': '2026-09-21',
   '/guide/': '2026-09-05',
-  '/tools/': '2026-09-05',
-  '/about/': '2026-09-05',
+  '/tools/': '2026-09-21',
+  '/about/': '2026-09-21',
+  '/recommend/': '2026-09-21',
 };
+// /recommend/<服务>/ 详情页均在 2026-09-21 整理上线
+const detailLastmod = '2026-09-21';
 
 export default defineConfig({
   site: 'https://ivpn.xyz',
@@ -52,7 +55,10 @@ export default defineConfig({
     sitemap({
       serialize(item) {
         const pathname = new URL(item.url).pathname;
-        const lastmod = articleLastmod[pathname] ?? staticPageLastmod[pathname];
+        const lastmod =
+          articleLastmod[pathname] ??
+          staticPageLastmod[pathname] ??
+          (pathname.startsWith('/recommend/') ? detailLastmod : undefined);
         if (lastmod) item.lastmod = lastmod;
         return item;
       },

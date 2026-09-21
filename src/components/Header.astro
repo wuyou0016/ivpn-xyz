@@ -1,24 +1,32 @@
 ---
+interface Props {
+  note?: string;
+}
+const { note = '资料整理 · 套餐对比 · 知识博客' } = Astro.props;
+
 const nav = [
+  { href: '/recommend/', label: '机场推荐' },
+  { href: '/airport/', label: '选购与机场知识' },
   { href: '/vpn/', label: 'VPN知识' },
-  { href: '/airport/', label: '机场知识' },
-  { href: '/airport/wuyou/', label: '无忧链接', highlight: true },
   { href: '/guide/', label: '教程' },
-  { href: '/tools/', label: '工具' },
-  { href: '/about/', label: '关于' },
+  { href: '/tools/', label: '客户端' },
+  { href: '/airport/wuyou/', label: '无忧链接', highlight: true },
 ];
 const path = Astro.url.pathname;
+// /airport/wuyou/ 属于 /airport/ 前缀，需要单独判断，避免两个菜单同时高亮
+const isActive = (href: string) => {
+  if (href === '/airport/') return path.startsWith('/airport/') && !path.startsWith('/airport/wuyou/');
+  return path === href || path.startsWith(href);
+};
 ---
 <header class="site-header">
-  <a class="brand" href="/" aria-label="ivpn 首页"><span class="brand-mark">i</span><span>ivpn</span></a>
+  <a class="brand" href="/" aria-label="ivpn 首页"><span class="brand-mark">iv</span><span>ivpn</span></a>
   <nav aria-label="主导航">
     {nav.map((item) => (
-      <a
-        href={item.href}
-        class:list={[{ active: path === item.href || (item.href !== '/' && path.startsWith(item.href)), 'nav-cta': item.highlight }]}
-      >
+      <a href={item.href} class:list={[{ active: isActive(item.href), 'nav-cta': item.highlight }]}>
         {item.label}
       </a>
     ))}
   </nav>
+  <span class="header-note">{note}</span>
 </header>
