@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = '页面不存在｜ivpn';
+const description = '你访问的页面不存在或已经移动，可以从机场推荐、选购指南或知识文章重新开始。';
+---
+<BaseLayout {title} {description} robots="noindex, follow">
+  <section class="page-head">
+    <div class="wrap">
+      <h1>页面不存在</h1>
+      <p>你访问的链接可能已经变更或输入有误。可以从下面这些入口重新开始：</p>
+    </div>
+  </section>
+  <section class="wrap list-section">
+    <div class="card-grid">
+      <a class="card" href="/recommend/"><span class="icon">↗</span><h3>机场推荐与套餐对比</h3><p>价格、线路、协议与节点资料，逐项标注来源。</p></a>
+      <a class="card" href="/airport/"><span class="icon">↗</span><h3>选购与机场知识</h3><p>怎么选、怎么核对，以及机场基础概念。</p></a>
+      <a class="card" href="/guide/"><span class="icon">↗</span><h3>客户端教程</h3><p>拿到订阅链接之后，如何在各系统上使用。</p></a>
+    </div>
+    <p style="margin-top:20px"><a class="text-link" href="/">返回 ivpn 首页 →</a></p>
+  </section>
+</BaseLayout>
