@@ -284,7 +284,7 @@ export const services: Service[] = [
   {
     id: 'xingdao',
     name: '星岛梦',
-    aff: 'https://kfccbb.xingdaomeng.com/#/?code=yyH19CtQ',
+    aff: 'https://kfccbb.xingdaomeng.com/#/?code=Lf6mYp3u',
     sourceLevel: 'entry',
     sourceLabel: '仅确认官方入口可访问',
     mark: '岛',
